@@ -1,7 +1,7 @@
 const { Book, User } = require('../models');
 const { AuthenticationError } = require('apollo-server-express');
 const { signToken } = require('../utils/auth');
-const { saveBook } = require('../controllers/user-controller');
+// const { saveBook } = require('../controllers/user-controller');
 
 const resolvers = {
     Query: {
@@ -47,13 +47,26 @@ const resolvers = {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: {savedBooks: args.input} },
+                    { $addToSet: { savedBooks: args.input } },
                     { new: true },
                 )
                 return updatedUser;
             }
-            throw new AuthenticationError("You need to be logged in to save a book");
-        }
+            throw new AuthenticationError("Trouble adding book, make sure you are logged in");
+        },
         // removeBook
+        removeBook: async (parent, args, context, info) => {
+            if (context.user) {
+                const updatedUser = await User.findOneAndUpdate(
+                    { _id: context.user._id },
+                    { $pull: { savedBooks: { bookId: args.bookId } } },
+                    { new: true },
+                );
+                return updatedUser;
+            }
+            throw new AuthenticationError("Trouble removing book, make sure you are logged in");
+        },
     }
-}
+};
+
+module.exports = resolvers;
