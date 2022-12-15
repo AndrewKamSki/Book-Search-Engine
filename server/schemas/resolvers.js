@@ -43,11 +43,11 @@ const resolvers = {
             return {token, user};
         },
         // saveBook
-        saveBook: async (parent, args, context, info) => {
+        saveBook: async (parent, { newBook }, context, info) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $addToSet: { savedBooks: args.input } },
+                    { $push: { savedBooks: newBook } },
                     { new: true },
                 )
                 return updatedUser;
@@ -55,11 +55,11 @@ const resolvers = {
             throw new AuthenticationError("Trouble adding book, make sure you are logged in");
         },
         // removeBook
-        removeBook: async (parent, args, context, info) => {
+        removeBook: async (parent, { bookId }, context, info) => {
             if (context.user) {
                 const updatedUser = await User.findOneAndUpdate(
                     { _id: context.user._id },
-                    { $pull: { savedBooks: { bookId: args.bookId } } },
+                    { $pull: { savedBooks: { bookId } } },
                     { new: true },
                 );
                 return updatedUser;
