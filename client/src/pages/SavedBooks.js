@@ -66,6 +66,11 @@ const SavedBooks = () => {
                   <Button className='btn-block btn-danger' onClick={() => handleDeleteBook(book.bookId)}>
                     Delete this Book!
                   </Button>
+                  {error && (
+                    <div className="col-12 my-3 bg-danger text-white p-3">
+                      {error.message}
+                    </div>
+                  )}
                 </Card.Body>
               </Card>
             );
