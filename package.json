@@ -1,6 +1,8 @@
 {
   "name": "googlebooks-app",
   "version": "1.0.0",
+  "private": true,
+  "homepage": "https://AndrewKamSki.github.io/Book-Search-Engine",
   "description": "",
   "main": "server/server.js",
   "scripts": {
